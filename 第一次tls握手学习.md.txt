@@ -1,0 +1,37 @@
+# 第1天：TLS 握手分析
+
+## 目标
+抓取 HTTPS 网站流量，分析 TLS 1.2 握手过程。
+
+## 实验环境
+- 目标网站：`https://www.baidu.com`
+- 抓包工具：Wireshark
+
+## 关键发现
+
+### 1. Client Hello
+客户端发送支持的加密套件列表。
+
+![Client Hello 加密套件列表]
+
+### 2. Server Hello
+服务器从中选择一个加密套件。
+
+- **服务器选择的加密套件：**
+  `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256`
+
+![Server Hello 选择加密套件](images/02_server_hello_selected_cipher.png)
+
+### 3. Certificate
+服务器发送数字证书以证明身份。
+
+- **证书颁发给：** `www.baidu.com`
+
+![证书域名信息](images/03_certificate_subject.png)
+
+## 总结
+- TLS 1.2 握手流程：Client Hello → Server Hello → Certificate → Server Hello Done → Client Key Exchange → Change Cipher Spec → Encrypted Handshake Message
+- 百度服务器使用了 **ECDHE** 进行密钥交换，保证前向保密性。
+
+## 用时
+约 30 分钟
